@@ -14,7 +14,8 @@ public class GameController : MonoBehaviour {
 	public Button gameButton; 
 	public Text gameButtonText; 
 	public Text messageBox; 
-	public List<float> reactionTimes; 
+	public List<float> reactionTimes;
+    public ContentController contentController; 
 
 
 	float switchTime; 
@@ -23,8 +24,9 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		tE = new TextEditor (); 
-	}
+		tE = new TextEditor ();
+        Screen.SetResolution(1024, 768, true);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -39,31 +41,64 @@ public class GameController : MonoBehaviour {
 				}
 				
 			}
+       
 
 
 		
 	}
 
 
-	public void CopyTextToClipBoard() {
-		tE.text = "TEST!\n TESTAGain";
-		tE.SelectAll (); 
-		tE.Copy (); 
-	}
+    public void CopyTextToClipBoard()
+    {
+        string excelText = "";
 
-	public void GameButtonPressed() {
+        foreach (float f in reactionTimes){
+            excelText = excelText+f.ToString() + "\n";
+        }
+        excelText = excelText.Replace(".", ",");//French computer
+        Debug.Log(excelText);
+        tE.text = excelText;
+        tE.SelectAll (); 
+		tE.Copy ();
+        messageBox.text = "Les données furent copiées dans le presse papier avec succès.";
+    }
+    public void DeleteLastTry() {
+        int size = reactionTimes.Count;
+        Debug.Log(size);
+        if (size>0){
+
+            reactionTimes.RemoveAt(size-1);
+            contentController.UpdateScrollList(reactionTimes);
+        }
+        messageBox.text = "Le dernier essai fut effacé.";
+    }
+    public void DeleteAllTry(){
+        reactionTimes.Clear();
+        contentController.UpdateScrollList(reactionTimes);
+        messageBox.text = "Tous les essais furent effacés.";
+    }
+
+
+    public void QuitApplication(){
+        Application.Quit();
+    }
+
+
+    public void GameButtonPressed() {
 		if (isGameOn) { //GameIsOn 
 			if (timeToReact) {
 				float reactionTime = Time.time - timer;
 				timer = 0; 
 				messageBox.text = "Votre temps de réaction est de : " + reactionTime.ToString() + " s";
-				reactionTimes.Add (reactionTime); 
+				reactionTimes.Add (reactionTime);
+                contentController.UpdateScrollList(reactionTimes);
 
 				TurnGameOff (); 
 			} else {
 				//Are you trying to cheat? 
-				//TurnGameOff(); 
-			}
+				///TurnGameOff();
+                messageBox.text = "Essaies-tu de tricher? Recommence!.";
+            }   
 		} 
 		else {// GameIsNotOn turn it on
 			TurnGameStandbyOn(); 
@@ -75,7 +110,7 @@ public class GameController : MonoBehaviour {
 		gameButtonText.text = "Le test est en cours. Cliquez seulement lorsque le bouton devient vert!"; 
 		SetButtonColor(Color.red);
 		 
-		switchTime = Time.time + Random.Range (2, 5); 
+		switchTime = Time.time + Random.Range (2, 6); 
 
 
 	}
@@ -92,6 +127,7 @@ public class GameController : MonoBehaviour {
 		timeToReact  = false; 
 		gameButtonText.text = "Commencer l'expérience"; 
 		SetButtonColor(Color.white);
+
 
 	}
 
