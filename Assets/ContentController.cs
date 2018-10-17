@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI; 
 
 public class ContentController : MonoBehaviour {
 
     public TextMeshProUGUI tMProPrefab;
+	public Scrollbar scrollbar;
 
     public void UpdateScrollList(List<float> reactionTimes) {
         //DeleteChilds
@@ -18,6 +20,7 @@ public class ContentController : MonoBehaviour {
             trIndex++;
             GenerateTextEntry(trIndex.ToString()+" - "+f.ToString().Replace(".",",")+" s");
         }
+		scrollbar.value = 0;
 
     }
     void GenerateTextEntry(string text){

@@ -42,7 +42,10 @@ public class GameController : MonoBehaviour {
 				
 			}
        
-
+		if (Input.GetKeyDown (KeyCode.A)) {
+			reactionTimes.Add (0.1f+Random.Range(0,0.1f));
+			contentController.UpdateScrollList(reactionTimes);
+		}
 
 		
 	}
@@ -96,7 +99,7 @@ public class GameController : MonoBehaviour {
 				TurnGameOff (); 
 			} else {
 				//Are you trying to cheat? 
-				///TurnGameOff();
+				TurnGameOff();
                 messageBox.text = "Essaies-tu de tricher? Recommence!.";
             }   
 		} 
