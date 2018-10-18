@@ -16,6 +16,8 @@ public class GameController : MonoBehaviour {
 	public Text messageBox; 
 	public List<float> reactionTimes;
     public ContentController contentController; 
+	public Text FPS; 
+	public string version; 
 
 
 	float switchTime; 
@@ -28,8 +30,8 @@ public class GameController : MonoBehaviour {
         Screen.SetResolution(1024, 768, true);
     }
 	
-	// Update is called once per frame
-	void Update () {
+	//
+	void FixedUpdate () {//Called every 1ms 
 		if (isGameOn) {
 
 
@@ -49,6 +51,11 @@ public class GameController : MonoBehaviour {
 
 		
 	}
+	void Update() {
+		float fps = 1 / Time.deltaTime;
+		FPS.text = "Version: "+version+ " FPS = " + fps.ToString ("0"); 
+
+	}
 
 
     public void CopyTextToClipBoard()
@@ -56,7 +63,7 @@ public class GameController : MonoBehaviour {
         string excelText = "";
 
         foreach (float f in reactionTimes){
-            excelText = excelText+f.ToString() + "\n";
+            excelText = excelText+f.ToString("0.000") + "\n";
         }
         excelText = excelText.Replace(".", ",");//French computer
         Debug.Log(excelText);
@@ -92,7 +99,7 @@ public class GameController : MonoBehaviour {
 			if (timeToReact) {
 				float reactionTime = Time.time - timer;
 				timer = 0; 
-				messageBox.text = "Votre temps de réaction est de : " + reactionTime.ToString() + " s";
+				messageBox.text = "Votre temps de réaction est de : " + reactionTime.ToString("0.000") + " s";
 				reactionTimes.Add (reactionTime);
                 contentController.UpdateScrollList(reactionTimes);
 

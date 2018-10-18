@@ -18,7 +18,7 @@ public class ContentController : MonoBehaviour {
         int trIndex = 0; 
         foreach (float f in reactionTimes){
             trIndex++;
-            GenerateTextEntry(trIndex.ToString()+" - "+f.ToString().Replace(".",",")+" s");
+            GenerateTextEntry(trIndex.ToString()+" - "+f.ToString("0.000").Replace(".",",")+" s");
         }
 		scrollbar.value = 0;
 
